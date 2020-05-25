@@ -27,7 +27,7 @@ Run in Java 7 or 8, depending on Java Swing lib support for these libraries.
 
 * [x] Organize folder structure
 * [x] Implement build in gradle
-* [ ] Run application using `gradle run`
+* [x] Run application using `gradle run`
 * [ ] Run in Java 8
 * [ ] Analyse code and pinpoint design mistakes
 * [ ] Refactor and release small increments of improvements
