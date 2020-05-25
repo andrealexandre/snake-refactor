@@ -1,4 +1,4 @@
-package org.snake.elements;
+package org.snake.models;
 
 import java.awt.Graphics;
 
@@ -7,36 +7,37 @@ import javax.swing.JPanel;
 public class Cell extends JPanel {
 	public static final long serialVersionUID = 0;
 
-	private Figure image;	
+	private FigureView view;
 		
 	public Cell() {
 		super();
 		this.setOpaque(false);		
 	}
 		
-	public void setFigure(Figure f){
-		image = f;
+	public void setFigure(FigureView f){
+		view = f;
 		this.repaint();
 	}
 	
 	public void removeFigure(){
-		image = null;
+		view = null;
 		this.repaint();
 	}
 	
 	public void paintComponent(Graphics canvas){		
 		super.paintComponent(canvas);				
 		
-		if(image != null){
-			image.draw(canvas, this.getWidth(), this.getHeight());
+		if(view != null){
+			view.draw(canvas, this.getWidth(), this.getHeight());
 		}
 	}	
 	
 	public boolean isGrass() {
-		return image == null;
+		return view == null;
 	}
 	
-	public boolean isVertebraeOrBlock() {
-		return image instanceof SnakeNode || image instanceof Block;
+	public boolean isEmptySpace() {
+		if(view != null) return view.isEmptySpace();
+		else return true;
 	}
 }

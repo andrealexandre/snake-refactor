@@ -1,10 +1,6 @@
-package org.snake.elements;
+package org.snake.models;
 
-import java.awt.*;
-
-public class SnakeNode implements Figure {
-    private static final Color SNAKE_NODE_COLOR = new Color(105, 210, 0);
-
+public class SnakeNode  {
     private Point point;
     private boolean isHead;
 
@@ -20,6 +16,9 @@ public class SnakeNode implements Figure {
         this.point = point;
     }
 
+    public boolean isHead() {
+        return isHead;
+    }
     public void asHead(){
         isHead = true;
     }
@@ -27,16 +26,4 @@ public class SnakeNode implements Figure {
         isHead = false;
     }
 
-    public void draw(Graphics canvas, int width, int height){
-        canvas.setColor(SNAKE_NODE_COLOR);
-        canvas.fillOval(0, 0, width, height);
-        canvas.setColor(Color.BLACK);
-        canvas.drawOval(0, 0, width, height);
-
-        if(isHead){
-            canvas.setColor(Color.BLUE);
-            canvas.fillOval((width)/4, height/4, width/2, height/2);
-            canvas.fillOval((width * 3)/4, height/4, width/2, height/2);
-        }
-    }
 }

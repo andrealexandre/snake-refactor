@@ -1,9 +1,10 @@
-package org.snake.elements;
+package org.snake.models;
 
 import org.snake.game.Board;
 import org.snake.game.GameWindow;
 import org.snake.settings.GameConfiguration;
 import org.snake.settings.SnakeSpeed;
+import org.snake.views.SnakeNodeView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -16,15 +17,15 @@ import java.util.Random;
 import static com.google.common.collect.Lists.newLinkedList;
 
 public class Snake implements ActionListener{
-	private GameWindow frame;
-	private Cell[][] board;
-	private Rat rat;
+	private final GameWindow frame;
+	private final Cell[][] board;
+	private final Rat rat;
 	
-	private Deque<SnakeNode> snake;
+	private Deque<SnakeNodeView> snake;
 	private Timer timer;
 	
 	private int direction;
-	private int snakeSpeed;
+	private final int snakeSpeed;
 	private int points;
 	
 	private static final int STATIC = 0;		
@@ -48,20 +49,21 @@ public class Snake implements ActionListener{
 		
 		timer = new Timer(snakeSpeed, this);
 		Random rn = new Random();		
-		snake = new LinkedList<SnakeNode>();
+		snake = new LinkedList<>();
 				
 		int x = rn.nextInt(this.board.length);
 		int y = rn.nextInt(this.board[0].length);
 
-		final SnakeNode snakeNode = new SnakeNode(new Point(x, y), true);
+		final SnakeNodeView snakeNode = new SnakeNodeView(new SnakeNode(new Point(x, y), true));
 		snake.add(snakeNode);
 		this.board[x][y].setFigure(snakeNode);
 	}
 	
 	public void restart(){
 
-		for (SnakeNode p : snake) {
-			board[p.getPoint().x][p.getPoint().y].removeFigure();
+		for (SnakeNodeView p : snake) {
+			final Point point = p.getModel().getPoint();
+			board[point.x][point.y].removeFigure();
 		}
 		
 		timer = new Timer(snakeSpeed, this);
@@ -74,42 +76,45 @@ public class Snake implements ActionListener{
 		int x = rn.nextInt(this.board.length);
 		int y = rn.nextInt(this.board[0].length);
 		
-		SnakeNode sv = new SnakeNode(new Point(x, y), true);
+		SnakeNodeView sv = new SnakeNodeView(new SnakeNode(new Point(x, y), true));
 		snake.add(sv);
-		board[x][y].setFigure(sv);			
+		board[x][y].setFigure(sv);
 	}
 		
-	public void stopSnake(){timer.stop();}
-	public void startSnake(){timer.start();}
-	public int getPoints(){return points;}
+	public void stopSnake() { timer.stop(); }
+	public void startSnake() { timer.start(); }
+	public int getPoints() { return points; }
 
 	public void actionPerformed(ActionEvent a){		
-		SnakeNode last = snake.getLast();
+		SnakeNodeView last = snake.getLast();
 
 		try {
-			board[last.getPoint().x][last.getPoint().y].removeFigure();
+			final Point point = last.getModel().getPoint();
+			board[point.x][point.y].removeFigure();
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
 		}
 		
-		SnakeNode first = snake.getFirst();
-		first.asTail();
-		int x = first.getPoint().x;
-		int y = first.getPoint().y;
-		board[x][y].repaint();
+		SnakeNodeView first = snake.getFirst();
+		first.getModel().asTail();
+		final Point point = first.getModel().getPoint();
+		board[point.x][point.y].repaint();
 		
-		if(rat.getPosition() == board[x][y]){			
+		if(rat.getPosition() == board[point.x][point.y]){
 			if(rat.isTimed()){				
 				points = points + ADDITION_POINTS + (SnakeSpeed.EASY.snakeSpeed - snakeSpeed) * rat.getNumberOfRats();
 			}else{
 				grow();
-				board[x][y].repaint();
-				points = points + ADDITION_POINTS + SnakeSpeed.EASY.snakeSpeed - snakeSpeed;;
+				board[point.x][point.y].repaint();
+				points = points + ADDITION_POINTS + SnakeSpeed.EASY.snakeSpeed - snakeSpeed;
 			}
 			
 			frame.display.points.setText(String.valueOf(points));
 			rat.eatRat();
 		}
+
+		int x = point.x;
+		int y = point.y;
 		
 		switch(direction){
 		case UP:
@@ -125,16 +130,16 @@ public class Snake implements ActionListener{
 			x = ++x >= board.length ? 0 : x;
 			break;				
 		}
-		
-		if(board[x][y].isVertebraeOrBlock()){
+
+		if(!board[x][y].isEmptySpace()){
 			timer.stop(); frame.gameover(); return;
 		}
 		
-		last.setPoint(new Point(x, y));
+		last.getModel().setPoint(new Point(x, y));
 		
 		board[x][y].setFigure(last);
 		snake.addFirst(last);
-		last.asHead();
+		last.getModel().asHead();
 		snake.removeLast();
 	}
 			
@@ -158,10 +163,10 @@ public class Snake implements ActionListener{
 	}	
 	
 	public void grow(){
-		SnakeNode last = snake.getLast();
+		SnakeNodeView last = snake.getLast();
 		
-		int x = last.getPoint().x;
-		int y = last.getPoint().y;
+		int x = last.getModel().getPoint().x;
+		int y = last.getModel().getPoint().y;
 		
 		switch(direction){
 		case UP:
@@ -178,8 +183,7 @@ public class Snake implements ActionListener{
 			break;				
 		}		
 		
-		SnakeNode sv = new SnakeNode(new Point(x, y), false);
-		sv.asTail();
+		SnakeNodeView sv = new SnakeNodeView(new SnakeNode(new Point(x, y), false));
 		snake.addFirst(sv);
 	}
 
