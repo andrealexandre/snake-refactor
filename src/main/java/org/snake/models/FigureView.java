@@ -1,4 +1,4 @@
-package org.snake.elements;
+package org.snake.models;
 
 import java.awt.Graphics;
 
