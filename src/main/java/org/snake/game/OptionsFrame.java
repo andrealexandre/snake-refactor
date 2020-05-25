@@ -149,7 +149,7 @@ public class OptionsFrame extends JFrame implements ActionListener{
 			b = new Board();
 			add(b , BorderLayout.NORTH);
 			
-			File f = new File("files\\labyrinths\\");			
+			File f = new File("src/main/java/org/snake/files/labyrinths/");
 			labyrinths = f.list();
 			
 			for(int i = 0; i < labyrinths.length; i++){				

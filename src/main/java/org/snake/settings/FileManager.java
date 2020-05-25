@@ -21,9 +21,9 @@ public class FileManager {
 	
 	private Player[] scores;
 	
-	public static final String HIGHSCORE_PATH = "files\\high scores\\";
+	public static final String HIGHSCORE_PATH = "src/main/java/org/snake/files/high scores/";
 	public static final String HIGHSCORE_EXT = ".high";
-	public static final String LABYRINTH_PATH = "files\\labyrinths\\";
+	public static final String LABYRINTH_PATH = "src/main/java/org/snake/files/labyrinths/";
 	public static final String LABYRINTH_EXT = ".labyrinth";
 	public static final String NOLABYRINTH = "noLabyrinth";
 	

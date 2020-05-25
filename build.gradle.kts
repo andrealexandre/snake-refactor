@@ -14,5 +14,5 @@ dependencies {
 }
 
 application {
-    mainClassName = "org.alexandre.App"
+    mainClassName = "org.snake.App"
 }

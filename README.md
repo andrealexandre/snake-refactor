@@ -4,6 +4,13 @@ This is mostly a humbling exercise in looking at code I did almost 10 years ago 
 
 The main goal I hope to take away from this exercise is to learn from common mistakes I used to do and build a post from this.
 
+# How to compile
+
+* Install Gradle `6.4.1`
+    * On MacOS/Linux `brew install gradle@6.4.1` (Requires Homebrew https://brew.sh/)
+    * On Windows `scoop install curl` (Requires Scoop https://scoop.sh/)
+* `gradle run`
+
 # Context
 
 The initial solution was build in eclipse, so it's not working out of the gate.
@@ -13,7 +20,7 @@ This project seemed to have two components, the game and convenience scripts.
 # Going forward
 
 My first steps will be to support a gradle build instead, to remove the dependency from Eclipse.
-Since most coding will be done in IntelliJ. 
+Since most coding will be done in ~~~~IntelliJ. 
 Run in Java 7 or 8, depending on Java Swing lib support for these libraries.
 
 # Roadmap
