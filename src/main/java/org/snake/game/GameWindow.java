@@ -24,20 +24,14 @@ public class GameWindow extends JFrame{
 	private Snake snake;
 	private Rat rat;
 	
-	private int gameState;
-	
-	public static final int PLAYING = 0;
-	public static final int PAUSED = 1;
-	public static final int GAMEOVER = 2;
-	
+	private GameState gameState = GameState.PLAYING;
+
 	public GameWindow(GameMenu callerMenu, GameConfiguration config){
 		super("Snake");
 		
 		this.setResizable(false);
 		this.addKeyListener(new KeyboardInterface());		
-		this.callerMenu = callerMenu;		
-		
-		gameState = PLAYING;
+		this.callerMenu = callerMenu;
 		
 		fileManager = new FileManager(config.getLabyrinthPath());		
 				
@@ -62,10 +56,12 @@ public class GameWindow extends JFrame{
 	
 	public int getCurrentPoint(){return snake.getPoints();}
 	
-	public int getGameState() {return gameState;} 
+	public GameState getGameState() {
+		return gameState;
+	}
 	
 	public void restart(){
-		gameState = PLAYING;
+		gameState = GameState.PLAYING;
 		snake.restartSnake();
 		rat.restart();
 	}
@@ -74,13 +70,15 @@ public class GameWindow extends JFrame{
 		callerMenu.setVisible(true);		
 		this.dispose();}
 	
-	public void setGameState(int code){
-		if(code == PLAYING){snake.startSnake();}
+	public void setGameState(GameState code){
+		if (code == GameState.PLAYING) {
+			snake.startSnake();
+		}
 		gameState = code;
 	}
 	
 	public void gameover(){
-		gameState = GAMEOVER;
+		gameState = GameState.GAMEOVER;
 		callDialog();
 	}
 	
@@ -88,9 +86,7 @@ public class GameWindow extends JFrame{
 		snake.stopSnake();
 		new GameDialog(this);
 	}
-	
 
-	
 	private class KeyboardInterface extends KeyAdapter{
 		public void keyPressed(KeyEvent k){
 			int code = k.getKeyCode();					
@@ -99,11 +95,11 @@ public class GameWindow extends JFrame{
 				code == KeyEvent.VK_DOWN || 
 				code == KeyEvent.VK_LEFT || 
 				code == KeyEvent.VK_RIGHT)
-				&& !((gameState == PAUSED) || (gameState == GAMEOVER) )){				
+				&& !((gameState == GameState.PAUSED) || (gameState == GameState.GAMEOVER) )){
 				snake.moveSnake(code);
 			}else{
 				if(code == KeyEvent.VK_ESCAPE){
-					gameState = PAUSED;
+					gameState = GameState.PAUSED;
 					callDialog();
 				}
 			}
