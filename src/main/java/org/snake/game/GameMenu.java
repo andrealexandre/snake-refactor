@@ -20,7 +20,7 @@ public class GameMenu extends JFrame {
 		this.config = config;
 	}
 
-	public void start() {
+	public void start(String gameWindowTitle) {
 		// Component setup
 		setLayout(new BorderLayout());
 		setSize(250, 110);
@@ -40,7 +40,7 @@ public class GameMenu extends JFrame {
 		// Listeners
 		start.addActionListener(event -> {
 			this.setVisible(false);
-			new GameWindow(this, config);
+			new GameWindow(gameWindowTitle, this, config);
 		});
 		options.addActionListener(event -> new OptionsFrame(this));
 		exit.addActionListener(event -> System.exit(0));

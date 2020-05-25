@@ -20,24 +20,23 @@ public class GameWindow extends JFrame{
 	private GameMenu callerMenu;	
 	public GameDataDisplay display;
 	
-	private Board board;
+	private Board board = new Board();
 	private Snake snake;
 	private Rat rat;
 	
 	private GameState gameState = GameState.PLAYING;
 
-	public GameWindow(GameMenu callerMenu, GameConfiguration config){
-		super("Snake");
-		
-		this.setResizable(false);
-		this.addKeyListener(new KeyboardInterface());		
+	public GameWindow(String windowTitle, GameMenu callerMenu, GameConfiguration config){
+		super(windowTitle);
+		setResizable(false);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		addKeyListener(new KeyboardInterface());
+
 		this.callerMenu = callerMenu;
 		
-		fileManager = new FileManager(config.getLabyrinthPath());		
-				
-		board = new Board();
-		
-		fileManager.loadLabyrinth(board.getBoard());	
+		fileManager = new FileManager(config.getLabyrinthPath());
+		fileManager.loadLabyrinth(board.getBoard());
 		
 		display = new GameDataDisplay();
 		rat = new Rat(board, display);
@@ -48,10 +47,8 @@ public class GameWindow extends JFrame{
 		add(display, BorderLayout.NORTH);
 		add(board, BorderLayout.SOUTH);
 		
-		pack();		
-		setLocationRelativeTo(null);		
-		setVisible(true);		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);		
+		pack();
+		setVisible(true);
 	}
 	
 	public int getCurrentPoint(){return snake.getPoints();}
