@@ -1,4 +1,4 @@
-package org.snake.models;
+package org.snake.models.basic;
 
 public class PointSpace {
     private final Range xRange;

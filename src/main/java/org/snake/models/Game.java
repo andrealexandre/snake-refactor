@@ -1,6 +1,10 @@
 package org.snake.models;
 
 import org.snake.game.Board;
+import org.snake.models.basic.Point;
+import org.snake.models.basic.PointSpace;
+import org.snake.models.basic.Range;
+import org.snake.models.basic.Vector;
 import org.snake.settings.GameConfiguration;
 import org.snake.settings.SnakeSpeed;
 import org.snake.views.SnakeNodeView;

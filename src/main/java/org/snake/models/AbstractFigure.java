@@ -1,5 +1,7 @@
 package org.snake.models;
 
+import org.snake.models.basic.Point;
+
 public abstract class AbstractFigure implements Figure {
 
     private Point point;

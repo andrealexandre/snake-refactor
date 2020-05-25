@@ -1,4 +1,4 @@
-package org.snake.models;
+package org.snake.models.basic;
 
 import java.util.Objects;
 
