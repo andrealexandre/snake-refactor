@@ -1,23 +1,30 @@
 package org.snake.settings;
 
 public class GameConfiguration {
-	private int snakeSpeed;
-	private String labyrinth;
-	
-	public static final int SNAKE_SPEED_EASY = 100;
-	public static final int SNAKE_SPEED_MEDIUM = 80;
-	public static final int SNAKE_SPEED_HARD = 50;
-	
-	public GameConfiguration(){
-		snakeSpeed = SNAKE_SPEED_MEDIUM;
-		labyrinth = null;
+
+	private SnakeSpeed snakeSpeed;
+	private String labyrinthPath;
+
+	public GameConfiguration(SnakeSpeed snakeSpeed, String labyrinthPath) {
+		this.snakeSpeed = snakeSpeed;
+		this.labyrinthPath = labyrinthPath;
 	}
-	
-	public void setLabyrinth(String labyrinthName){labyrinth = labyrinthName;}
-	public String getLabyrinthPath(){return labyrinth;}
-	
-	public void setSnakeSpeedAtEasy(){this.snakeSpeed = SNAKE_SPEED_EASY;}
-	public void setSnakeSpeedAtMedium(){this.snakeSpeed = SNAKE_SPEED_MEDIUM;}
-	public void setSnakeSpeedAtHard(){this.snakeSpeed = SNAKE_SPEED_HARD;}
-	public int getSnakeSpeed(){return snakeSpeed;}
+
+	public GameConfiguration() {
+		this(SnakeSpeed.MEDIUM, null);
+	}
+
+	public SnakeSpeed getSnakeSpeed() {
+		return snakeSpeed;
+	}
+	public void setSnakeSpeed(SnakeSpeed snakeSpeed) {
+		this.snakeSpeed = snakeSpeed;
+	}
+
+	public String getLabyrinthPath() {
+		return labyrinthPath;
+	}
+	public void setLabyrinthPath(String labyrinthPath) {
+		this.labyrinthPath = labyrinthPath;
+	}
 }

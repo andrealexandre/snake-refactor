@@ -18,6 +18,7 @@ import javax.swing.border.EtchedBorder;
 
 import org.snake.settings.FileManager;
 import org.snake.settings.GameConfiguration;
+import org.snake.settings.SnakeSpeed;
 
 public class OptionsFrame extends JFrame implements ActionListener{
 	public static final long serialVersionUID = 1L;
@@ -87,23 +88,21 @@ public class OptionsFrame extends JFrame implements ActionListener{
 	}
 	
 	private void creatGameConfiguration(){
-		GameConfiguration g = caller.config;
-		
-		if(snakeSpeedEasy.isSelected()){
-			g.setSnakeSpeedAtEasy();			
-		}else{
-		if(snakeSpeedMedium.isSelected()){
-			g.setSnakeSpeedAtMedium();			
-		}else{
-		if(snakeSpeedHard.isSelected()){
-			g.setSnakeSpeedAtHard();			
-		}
-		}
+		final GameConfiguration gameConfiguration = caller.config;
+
+		if (snakeSpeedEasy.isSelected()) {
+			gameConfiguration.setSnakeSpeed(SnakeSpeed.EASY);
+		} else if (snakeSpeedMedium.isSelected()) {
+			gameConfiguration.setSnakeSpeed(SnakeSpeed.MEDIUM);
+		} else if (snakeSpeedHard.isSelected()) {
+			gameConfiguration.setSnakeSpeed(SnakeSpeed.HARD);
+		} else {
+			gameConfiguration.setSnakeSpeed(SnakeSpeed.MEDIUM);
 		}
 		
-		g.setLabyrinth(lp.getLabyrinthName());
+		gameConfiguration.setLabyrinthPath(lp.getLabyrinthName());
 		
-		caller.config = g;					
+		caller.config = gameConfiguration;
 	}
 	
 	public void actionPerformed(ActionEvent a){

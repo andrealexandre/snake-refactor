@@ -15,6 +15,7 @@ import java.util.Random;
 import javax.swing.Timer;
 
 import org.snake.settings.GameConfiguration;
+import org.snake.settings.SnakeSpeed;
 
 public class Snake implements ActionListener{
 	private GameWindow frame;
@@ -42,12 +43,12 @@ public class Snake implements ActionListener{
 		
 		direction = STATIC;
 		if(config != null){
-			snakeSpeed = config.getSnakeSpeed();			
+			snakeSpeed = config.getSnakeSpeed().snakeSpeed;
 		}else{
-			snakeSpeed = GameConfiguration.SNAKE_SPEED_MEDIUM;			
+			snakeSpeed = SnakeSpeed.MEDIUM.snakeSpeed;
 		}		
 		
-		timer = new Timer(snakeSpeed, this);	
+		timer = new Timer(snakeSpeed, this);
 		Random rn = new Random();		
 		snake = new LinkedList<SnakeVertebrae>();		
 				
@@ -103,11 +104,11 @@ public class Snake implements ActionListener{
 		
 		if(rat.getPosition() == board[x][y]){			
 			if(rat.isTimed()){				
-				points = points + ADDITION_POINTS + (GameConfiguration.SNAKE_SPEED_EASY - snakeSpeed) * rat.getNumberOfRats();
+				points = points + ADDITION_POINTS + (SnakeSpeed.EASY.snakeSpeed - snakeSpeed) * rat.getNumberOfRats();
 			}else{
 				grow();
 				board[x][y].repaint();
-				points = points + ADDITION_POINTS + GameConfiguration.SNAKE_SPEED_EASY - snakeSpeed;;				
+				points = points + ADDITION_POINTS + SnakeSpeed.EASY.snakeSpeed - snakeSpeed;;
 			}
 			
 			frame.display.points.setText(String.valueOf(points));
