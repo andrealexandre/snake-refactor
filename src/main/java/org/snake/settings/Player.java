@@ -1,4 +1,4 @@
-package settings;
+package org.snake.settings;
 
 public class Player{
 	private String name;

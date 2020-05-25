@@ -1,4 +1,4 @@
-package elements;
+package org.snake.elements;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,8 +8,8 @@ import java.util.Random;
 
 import javax.swing.Timer;
 
-import game.Board;
-import game.GameDataDisplay;
+import org.snake.game.Board;
+import org.snake.game.GameDataDisplay;
 
 public class Rat implements ActionListener{	
 	private Cell[][] board;

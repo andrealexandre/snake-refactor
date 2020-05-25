@@ -1,4 +1,4 @@
-package settings;
+package org.snake.settings;
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -12,8 +12,8 @@ import java.io.PrintWriter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import elements.Block;
-import elements.Cell;
+import org.snake.elements.Block;
+import org.snake.elements.Cell;
 
 public class FileManager {
 	private String highScorePath;
@@ -166,9 +166,9 @@ public class FileManager {
 		
 		for( int i = 0; i < scores.length; i++){
 			if(scores[i] == null){
-				d.add(new JLabel((i + 1) + "º -  ------------------", JLabel.CENTER));
+				d.add(new JLabel((i + 1) + "ï¿½ -  ------------------", JLabel.CENTER));
 			}else{
-				d.add(new JLabel((i + 1) + "º - " +scores[i].toString(), JLabel.CENTER));
+				d.add(new JLabel((i + 1) + "ï¿½ - " +scores[i].toString(), JLabel.CENTER));
 			}
 		}
 		

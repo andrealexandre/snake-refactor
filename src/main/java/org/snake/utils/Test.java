@@ -1,4 +1,4 @@
-package utils;
+package org.snake.utils;
 
 
 public class Test{

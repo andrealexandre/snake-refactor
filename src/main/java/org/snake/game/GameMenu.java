@@ -1,4 +1,4 @@
-package game;
+package org.snake.game;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import settings.GameConfiguration;
+import org.snake.settings.GameConfiguration;
 
 
 public class GameMenu extends JFrame implements ActionListener{

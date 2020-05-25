@@ -1,7 +1,7 @@
-package elements;
+package org.snake.elements;
 
-import game.Board;
-import game.GameWindow;
+import org.snake.game.Board;
+import org.snake.game.GameWindow;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,8 +14,8 @@ import java.util.Random;
 
 import javax.swing.Timer;
 
-import settings.GameConfiguration;
-	
+import org.snake.settings.GameConfiguration;
+
 public class Snake implements ActionListener{
 	private GameWindow frame;
 	private Cell[][] board;

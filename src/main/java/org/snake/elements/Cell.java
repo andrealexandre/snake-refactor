@@ -1,10 +1,10 @@
-package elements;
+package org.snake.elements;
 
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import elements.Snake.SnakeVertebrae;
+import org.snake.elements.Snake.SnakeVertebrae;
 
 public class Cell extends JPanel {
 	public static final long serialVersionUID = 0;	

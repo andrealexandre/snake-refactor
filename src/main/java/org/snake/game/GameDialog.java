@@ -1,4 +1,4 @@
-package game;
+package org.snake.game;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -128,7 +128,7 @@ public class GameDialog extends JDialog implements ActionListener{
 			   if (	   (c >= 'a') && (c <= 'z') || 
 					   (c >= 'A') && (c <= 'Z') ||
 					   (c >= '0') && (c <= '9') ||
-					   (c >= 'À') && (c <= 'ÿ') ||
+					   (c >= 'ï¿½') && (c <= 'ï¿½') ||
 					   (c == ' ')
 			   		) continue;
 			   

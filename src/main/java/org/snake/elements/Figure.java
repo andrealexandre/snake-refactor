@@ -1,4 +1,4 @@
-package elements;
+package org.snake.elements;
 
 import java.awt.Graphics;
 

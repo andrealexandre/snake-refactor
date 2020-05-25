@@ -1,4 +1,4 @@
-package game;
+package org.snake.game;
 
 
 import java.awt.BorderLayout;
@@ -16,8 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EtchedBorder;
 
-import settings.FileManager;
-import settings.GameConfiguration;
+import org.snake.settings.FileManager;
+import org.snake.settings.GameConfiguration;
 
 public class OptionsFrame extends JFrame implements ActionListener{
 	public static final long serialVersionUID = 1L;

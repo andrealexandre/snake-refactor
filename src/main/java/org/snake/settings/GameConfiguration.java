@@ -1,4 +1,4 @@
-package settings;
+package org.snake.settings;
 
 public class GameConfiguration {
 	private int snakeSpeed;

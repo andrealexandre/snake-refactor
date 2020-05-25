@@ -1,4 +1,4 @@
-package utils;
+package org.snake.utils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,7 +11,7 @@ public class LabyrinthGenerator {
 	{pw = new PrintWriter(pathOut);}
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException{
-		LabyrinthGenerator l = new LabyrinthGenerator("D:\\ISEL\\2º Semestre\\POO\\Trabalho 3\\Snake\\files\\labyrinths\\n4.labyrinth");
+		LabyrinthGenerator l = new LabyrinthGenerator("D:\\ISEL\\2ï¿½ Semestre\\POO\\Trabalho 3\\Snake\\files\\labyrinths\\n4.labyrinth");
 		l.drawLine(10, 10, 10, 20);
 		l.drawLine(20, 10, 20, 20);		
 		l.close();

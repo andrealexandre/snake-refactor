@@ -1,8 +1,21 @@
+# Java
 *.class
+
+# MacOS
 .DS_Store
 
+# IDEA
 .idea/
 *.iml
 
+# Eclipse
 .classpath
 .project
+
+# Gradle
+gradle/
+.gradle
+build
+.gitattributes
+gradlew
+gradlew.bat

@@ -1,4 +1,4 @@
-package game;
+package org.snake.game;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -6,7 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
-import elements.Cell;
+import org.snake.elements.Cell;
 
 public class Board extends JPanel{
 	public static final long serialVersionUID = 1L;

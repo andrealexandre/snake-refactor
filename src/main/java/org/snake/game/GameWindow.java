@@ -1,7 +1,7 @@
-package game;
+package org.snake.game;
 
-import elements.Rat;
-import elements.Snake;
+import org.snake.elements.Rat;
+import org.snake.elements.Snake;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
@@ -9,8 +9,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 
-import settings.FileManager;
-import settings.GameConfiguration;
+import org.snake.settings.FileManager;
+import org.snake.settings.GameConfiguration;
 
 public class GameWindow extends JFrame{
 	public static final long serialVersionUID = 1L;
