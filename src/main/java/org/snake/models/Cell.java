@@ -1,5 +1,7 @@
 package org.snake.models;
 
+import org.snake.views.FigureView;
+
 import java.awt.Graphics;
 
 import javax.swing.JPanel;

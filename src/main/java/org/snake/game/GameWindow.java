@@ -1,7 +1,7 @@
 package org.snake.game;
 
 import org.snake.models.Rat;
-import org.snake.models.Snake;
+import org.snake.models.Game;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
@@ -25,7 +25,7 @@ public class GameWindow extends JFrame{
 	
 	private final Board board = new Board(); // Game window shouldn't instantiate this
 	private final Rat rat = new Rat(board, display); // Game window shouldn't instantiate this
-	private final Snake snake;
+	private final Game game;
 
 	
 	private GameState gameState = GameState.PLAYING;
@@ -42,7 +42,17 @@ public class GameWindow extends JFrame{
 		fileManager = new FileManager(config.getLabyrinthPath());
 		fileManager.loadLabyrinth(board.getBoard()); // side effects leak
 
-		snake = new Snake(this, board, rat, config); // Game window shouldn't instantiate this
+		game = new Game(new Game.OnChangeListener() {
+			@Override
+			public void onPointsChange(int points) {
+				display.points.setText(String.valueOf(points));
+			}
+
+			@Override
+			public void onGameOver() {
+				gameover();
+			}
+		}, board, rat, config); // Game window shouldn't instantiate this
 		
 		setLayout(new BorderLayout());
 		
@@ -53,7 +63,7 @@ public class GameWindow extends JFrame{
 		setVisible(true);
 	}
 	
-	public int getCurrentPoint(){return snake.getPoints();}
+	public int getCurrentPoint(){return game.getPoints();}
 	
 	public GameState getGameState() {
 		return gameState;
@@ -61,7 +71,7 @@ public class GameWindow extends JFrame{
 	
 	public void restart(){
 		gameState = GameState.PLAYING;
-		snake.restart();
+		game.restart();
 		rat.restart();
 	}
 	
@@ -71,7 +81,7 @@ public class GameWindow extends JFrame{
 	
 	public void setGameState(GameState code){
 		if (code == GameState.PLAYING) {
-			snake.startSnake();
+			game.startSnake();
 		}
 		gameState = code;
 	}
@@ -81,7 +91,7 @@ public class GameWindow extends JFrame{
 	}
 	
 	public void callDialog(){
-		snake.stopSnake();
+		game.stopSnake();
 		new GameDialog(this);
 	}
 
@@ -93,7 +103,7 @@ public class GameWindow extends JFrame{
 					KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT);
 
 			if (keys.contains(code) && !(gameState == GameState.PAUSED || gameState == GameState.GAMEOVER)) {
-				snake.moveSnake(code);
+				game.moveSnake(code);
 			} else {
 				if (code == KeyEvent.VK_ESCAPE) {
 					updateGameState(GameState.PAUSED);

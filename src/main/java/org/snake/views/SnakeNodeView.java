@@ -1,6 +1,5 @@
 package org.snake.views;
 
-import org.snake.models.FigureView;
 import org.snake.models.SnakeNode;
 
 import java.awt.*;

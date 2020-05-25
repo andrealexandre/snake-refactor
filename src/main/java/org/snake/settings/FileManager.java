@@ -12,8 +12,8 @@ import java.io.PrintWriter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.snake.models.Block;
 import org.snake.models.Cell;
+import org.snake.views.BlockView;
 
 public class FileManager {
 	private String highScorePath;
@@ -118,29 +118,31 @@ public class FileManager {
 	public void loadLabyrinth(Cell[][] c){
 		if(labyrinthPath != null){loadLabyrinth(c, labyrinthPath);}		
 	}
-	
-	public static void loadLabyrinth(Cell[][] c, String labyrinthPath){
+
+	public static void loadLabyrinth(Cell[][] c, String labyrinthPath) {
 		BufferedReader br;
-		
-		try{		
-		br = new BufferedReader(new FileReader(labyrinthPath));
 
-		String s;
-		String[] xy;
-		
-		Block b = new Block();
+		try {
+			br = new BufferedReader(new FileReader(labyrinthPath));
 
-		while((s = br.readLine()) != null){
-			xy = s.split(",");
-			
-			int x = Integer.parseInt( xy[0] );
-			int y = Integer.parseInt( xy[1] );
-			
-			c[x][y].setFigure(b);			
+			String s;
+			String[] xy;
+
+			BlockView b = new BlockView();
+
+			while ((s = br.readLine()) != null) {
+				xy = s.split(",");
+
+				int x = Integer.parseInt(xy[0]);
+				int y = Integer.parseInt(xy[1]);
+
+				c[x][y].setFigure(b);
+			}
+
+			br.close();
+		} catch (IOException e) {
+			System.exit(0);
 		}
-		
-		br.close();
-		}catch(IOException e){System.exit(0);;}
 	}
 	
 	public JPanel getDisplayHighScore(){

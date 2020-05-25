@@ -1,19 +1,14 @@
 package org.snake.models;
 
-import java.awt.Color;
-import java.awt.Graphics;
+public class Block extends AbstractFigure {
 
-public class Block implements FigureView {
+    public Block(Point point) {
+        super(point);
+    }
 
-	@Override
-	public boolean isEmptySpace() {
-		return false;
-	}
-
-	@Override
-	public void draw(Graphics canvas, int x, int y){
-		canvas.setColor(Color.lightGray);
-		canvas.fill3DRect(0, 0, x, y, true);	
-	}
+    @Override
+    public boolean isEmptySpace() {
+        return false;
+    }
 
 }
