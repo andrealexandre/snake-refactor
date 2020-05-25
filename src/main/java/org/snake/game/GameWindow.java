@@ -6,23 +6,27 @@ import org.snake.elements.Snake;
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.JFrame;
 
 import org.snake.settings.FileManager;
 import org.snake.settings.GameConfiguration;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 public class GameWindow extends JFrame{
 	public static final long serialVersionUID = 1L;
 	
-	public FileManager fileManager;
+	public FileManager fileManager; // Game window shouldn't care about this
 	
-	private GameMenu callerMenu;	
-	public GameDataDisplay display;
+	private GameMenu callerMenu; // GameMenu should be mentioned here, we are creating direct cyclic dependencies
+	public GameDataDisplay display = new GameDataDisplay(); // Game window shouldn't instantiate this
 	
-	private Board board = new Board();
+	private Board board = new Board(); // Game window shouldn't instantiate this
+	private Rat rat = new Rat(board, display); // Game window shouldn't instantiate this
 	private Snake snake;
-	private Rat rat;
+
 	
 	private GameState gameState = GameState.PLAYING;
 
@@ -36,11 +40,9 @@ public class GameWindow extends JFrame{
 		this.callerMenu = callerMenu;
 		
 		fileManager = new FileManager(config.getLabyrinthPath());
-		fileManager.loadLabyrinth(board.getBoard());
-		
-		display = new GameDataDisplay();
-		rat = new Rat(board, display);
-		snake = new Snake(this, board, rat, config);
+		fileManager.loadLabyrinth(board.getBoard()); // side effects leak
+
+		snake = new Snake(this, board, rat, config); // Game window shouldn't instantiate this
 		
 		setLayout(new BorderLayout());
 		
@@ -59,7 +61,7 @@ public class GameWindow extends JFrame{
 	
 	public void restart(){
 		gameState = GameState.PLAYING;
-		snake.restartSnake();
+		snake.restart();
 		rat.restart();
 	}
 	
@@ -75,8 +77,7 @@ public class GameWindow extends JFrame{
 	}
 	
 	public void gameover(){
-		gameState = GameState.GAMEOVER;
-		callDialog();
+		updateGameState(GameState.GAMEOVER);
 	}
 	
 	public void callDialog(){
@@ -86,20 +87,23 @@ public class GameWindow extends JFrame{
 
 	private class KeyboardInterface extends KeyAdapter{
 		public void keyPressed(KeyEvent k){
-			int code = k.getKeyCode();					
-			
-			if((code == KeyEvent.VK_UP || 
-				code == KeyEvent.VK_DOWN || 
-				code == KeyEvent.VK_LEFT || 
-				code == KeyEvent.VK_RIGHT)
-				&& !((gameState == GameState.PAUSED) || (gameState == GameState.GAMEOVER) )){
+			int code = k.getKeyCode();
+
+			final List<Integer> keys = newArrayList(
+					KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT);
+
+			if (keys.contains(code) && !(gameState == GameState.PAUSED || gameState == GameState.GAMEOVER)) {
 				snake.moveSnake(code);
-			}else{
-				if(code == KeyEvent.VK_ESCAPE){
-					gameState = GameState.PAUSED;
-					callDialog();
+			} else {
+				if (code == KeyEvent.VK_ESCAPE) {
+					updateGameState(GameState.PAUSED);
 				}
 			}
 		}
+	}
+
+	private void updateGameState(GameState paused) {
+		gameState = paused;
+		callDialog();
 	}
 }

@@ -93,18 +93,19 @@ public class Rat implements ActionListener{
 		setRandomRat();		
 	}
 	
-	private class RatFigure extends Figure{
-		 public RatFigure() { super(); }
+	private class RatFigure implements Figure {
 		 private final Color BROWN = new Color(128, 64, 0);
-		 
-		 public void draw(Graphics canvas, int x, int y){
-			if(timer == null)
-			{canvas.setColor(BROWN);}
-			else{canvas.setColor(Color.yellow);}
-			
-			canvas.fillOval(0, 0, x, y);		
+
+		public void draw(Graphics canvas, int width, int height) {
+			if (Rat.this.timer == null) {
+				canvas.setColor(BROWN);
+			} else {
+				canvas.setColor(Color.yellow);
+			}
+
+			canvas.fillOval(0, 0, width, height);
 			canvas.setColor(Color.BLACK);
-			canvas.drawOval(0, 0, x, y);
-		 }
+			canvas.drawOval(0, 0, width, height);
+		}
 	}
 }
