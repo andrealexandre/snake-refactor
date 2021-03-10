@@ -4,11 +4,9 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import org.snake.elements.Snake.SnakeVertebrae;
-
 public class Cell extends JPanel {
-	public static final long serialVersionUID = 0;	
-	
+	public static final long serialVersionUID = 0;
+
 	private Figure image;	
 		
 	public Cell() {
@@ -34,8 +32,11 @@ public class Cell extends JPanel {
 		}
 	}	
 	
-	public boolean isGrass(){return image == null;}
+	public boolean isGrass() {
+		return image == null;
+	}
 	
-	public boolean isVertebraeOrBlock()
-	{return (image instanceof SnakeVertebrae) || (image instanceof Block);}	
+	public boolean isVertebraeOrBlock() {
+		return image instanceof SnakeNode || image instanceof Block;
+	}
 }

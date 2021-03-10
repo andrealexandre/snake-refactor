@@ -27,13 +27,13 @@ public class GameDialog extends JDialog implements ActionListener{
 		JPanel j1 = new JPanel();
 		j1.setLayout(new FlowLayout());
 		
-		if(j.getGameState() == (GameWindow.PAUSED)){
+		if(j.getGameState() == (GameState.PAUSED)){
 			setTitle("Pause");
 			JButton play = new JButton("Play");										
 			play.addActionListener(this);				
 			j1.add(play);
 		}else{
-			if(j.getGameState() == (GameWindow.GAMEOVER)){setTitle("GameOver");}
+			if(j.getGameState() == (GameState.GAMEOVER)){setTitle("GameOver");}
 		}
 		
 		JButton restart = new JButton("Restart");			
@@ -61,7 +61,7 @@ public class GameDialog extends JDialog implements ActionListener{
 		GameWindow g = (GameWindow) this.getOwner();	
 		
 		if(s.equals("Play")){						
-			g.setGameState(GameWindow.PLAYING);
+			g.setGameState(GameState.PLAYING);
 			g.setVisible(true);
 			this.dispose();
 		}else{

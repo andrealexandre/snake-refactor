@@ -2,27 +2,25 @@ package org.snake.elements;
 
 import org.snake.game.Board;
 import org.snake.game.GameWindow;
+import org.snake.settings.GameConfiguration;
+import org.snake.settings.SnakeSpeed;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Iterator;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javax.swing.Timer;
-
-import org.snake.settings.GameConfiguration;
-import org.snake.settings.SnakeSpeed;
+import static com.google.common.collect.Lists.newLinkedList;
 
 public class Snake implements ActionListener{
 	private GameWindow frame;
 	private Cell[][] board;
 	private Rat rat;
 	
-	private LinkedList<SnakeVertebrae> snake;
+	private Deque<SnakeNode> snake;
 	private Timer timer;
 	
 	private int direction;
@@ -50,37 +48,33 @@ public class Snake implements ActionListener{
 		
 		timer = new Timer(snakeSpeed, this);
 		Random rn = new Random();		
-		snake = new LinkedList<SnakeVertebrae>();		
+		snake = new LinkedList<SnakeNode>();
 				
 		int x = rn.nextInt(this.board.length);
 		int y = rn.nextInt(this.board[0].length);
-		
-		SnakeVertebrae sv = new SnakeVertebrae(x, y);
-		sv.setHead();
-		snake.add(sv);
-		this.board[x][y].setFigure(sv);		
+
+		final SnakeNode snakeNode = new SnakeNode(new Point(x, y), true);
+		snake.add(snakeNode);
+		this.board[x][y].setFigure(snakeNode);
 	}
 	
-	public void restartSnake(){
-		Iterator<SnakeVertebrae> i = snake.iterator();
-		
-		while(i.hasNext()){
-			SnakeVertebrae p = i.next();		
-			board[p.x][p.y].removeFigure();
+	public void restart(){
+
+		for (SnakeNode p : snake) {
+			board[p.getPoint().x][p.getPoint().y].removeFigure();
 		}
 		
 		timer = new Timer(snakeSpeed, this);
 		direction = STATIC;
 		points = 0;
 		frame.display.points.setText("" + (points));
-		snake = new LinkedList<SnakeVertebrae>();
+		snake = newLinkedList();
 		
 		Random rn = new Random();						
 		int x = rn.nextInt(this.board.length);
 		int y = rn.nextInt(this.board[0].length);
 		
-		SnakeVertebrae sv = new SnakeVertebrae(x, y);
-		sv.setHead();
+		SnakeNode sv = new SnakeNode(new Point(x, y), true);
 		snake.add(sv);
 		board[x][y].setFigure(sv);			
 	}
@@ -88,18 +82,20 @@ public class Snake implements ActionListener{
 	public void stopSnake(){timer.stop();}
 	public void startSnake(){timer.start();}
 	public int getPoints(){return points;}
-	
-	
+
 	public void actionPerformed(ActionEvent a){		
-		SnakeVertebrae last = snake.getLast();
+		SnakeNode last = snake.getLast();
+
+		try {
+			board[last.getPoint().x][last.getPoint().y].removeFigure();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+		}
 		
-		try{board[last.x][last.y].removeFigure();}
-		catch(ArrayIndexOutOfBoundsException e){}
-		
-		SnakeVertebrae first = snake.getFirst();		
-		first.setVertebrae();		
-		int x = first.x;
-		int y = first.y;		
+		SnakeNode first = snake.getFirst();
+		first.asTail();
+		int x = first.getPoint().x;
+		int y = first.getPoint().y;
 		board[x][y].repaint();
 		
 		if(rat.getPosition() == board[x][y]){			
@@ -134,13 +130,11 @@ public class Snake implements ActionListener{
 			timer.stop(); frame.gameover(); return;
 		}
 		
-		last.x = x;
-		last.y = y;
+		last.setPoint(new Point(x, y));
 		
 		board[x][y].setFigure(last);
 		snake.addFirst(last);
-		last.setHead();
-		
+		last.asHead();
 		snake.removeLast();
 	}
 			
@@ -164,10 +158,10 @@ public class Snake implements ActionListener{
 	}	
 	
 	public void grow(){
-		SnakeVertebrae last = snake.getLast();		
+		SnakeNode last = snake.getLast();
 		
-		int x = last.x;
-		int y = last.y;
+		int x = last.getPoint().x;
+		int y = last.getPoint().y;
 		
 		switch(direction){
 		case UP:
@@ -184,36 +178,9 @@ public class Snake implements ActionListener{
 			break;				
 		}		
 		
-		SnakeVertebrae sv = new SnakeVertebrae(x, y);
-		sv.setVertebrae();	
+		SnakeNode sv = new SnakeNode(new Point(x, y), false);
+		sv.asTail();
 		snake.addFirst(sv);
 	}
-	
-	public class SnakeVertebrae extends Figure{		
-		private int x;
-		private int y;
-		private boolean isHead;
-		
-		public SnakeVertebrae(int x, int y){
-			super();
-			this.x = x;
-			this.y = y;
-		}
-		
-		public void setHead(){isHead = true;}
-		public void setVertebrae(){isHead = false;}
-		
-		public void draw(Graphics canvas, int x, int y){
-			canvas.setColor(new Color(105, 210, 0));
-			canvas.fillOval(0, 0, x, y);		
-			canvas.setColor(Color.BLACK);
-			canvas.drawOval(0, 0, x, y);	
-			
-			if(isHead){
-				canvas.setColor(Color.BLUE);
-				canvas.fillOval((x)/4, y/4, x/2, y/2);
-				canvas.fillOval((x * 3)/4, y/4, x/2, y/2);		
-			}	
-		}
-	}
+
 }

@@ -10,9 +10,14 @@ public class App {
     }
 
     public static void main(String[] args) {
+        // Date
         String menuTitle = "Snake Game Menu";
+        String gameWindowTitle = "Snake";
+
+       // Setup
         final GameConfiguration gameConfiguration = new GameConfiguration();
-        new GameMenu(menuTitle, gameConfiguration).start();
+
+        new GameMenu(menuTitle, gameConfiguration).start(gameWindowTitle);
 
         System.out.println(new App().getGreeting());
     }
