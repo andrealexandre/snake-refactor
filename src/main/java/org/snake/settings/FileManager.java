@@ -12,8 +12,8 @@ import java.io.PrintWriter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.snake.elements.Block;
-import org.snake.elements.Cell;
+import org.snake.models.Block;
+import org.snake.models.Cell;
 
 public class FileManager {
 	private String highScorePath;

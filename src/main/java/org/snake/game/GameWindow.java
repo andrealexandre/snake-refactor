@@ -1,7 +1,7 @@
 package org.snake.game;
 
-import org.snake.elements.Rat;
-import org.snake.elements.Snake;
+import org.snake.models.Rat;
+import org.snake.models.Snake;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
@@ -20,12 +20,12 @@ public class GameWindow extends JFrame{
 	
 	public FileManager fileManager; // Game window shouldn't care about this
 	
-	private GameMenu callerMenu; // GameMenu should be mentioned here, we are creating direct cyclic dependencies
+	private final GameMenu callerMenu; // GameMenu should be mentioned here, we are creating direct cyclic dependencies
 	public GameDataDisplay display = new GameDataDisplay(); // Game window shouldn't instantiate this
 	
-	private Board board = new Board(); // Game window shouldn't instantiate this
-	private Rat rat = new Rat(board, display); // Game window shouldn't instantiate this
-	private Snake snake;
+	private final Board board = new Board(); // Game window shouldn't instantiate this
+	private final Rat rat = new Rat(board, display); // Game window shouldn't instantiate this
+	private final Snake snake;
 
 	
 	private GameState gameState = GameState.PLAYING;

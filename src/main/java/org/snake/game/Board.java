@@ -6,7 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
-import org.snake.elements.Cell;
+import org.snake.models.Cell;
 
 public class Board extends JPanel{
 	public static final long serialVersionUID = 1L;

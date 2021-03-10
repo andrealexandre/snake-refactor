@@ -1,4 +1,4 @@
-package org.snake.elements;
+package org.snake.models;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -53,7 +53,7 @@ public class Rat implements ActionListener{
 		}
 		
 		position = board[x][y];
-		position.setFigure(new RatFigure());		
+		position.setFigure(new RatFigureView());
 	}
 	
 	public int getNumberOfRats(){return numberOfRats;}
@@ -93,8 +93,13 @@ public class Rat implements ActionListener{
 		setRandomRat();		
 	}
 	
-	private class RatFigure implements Figure {
-		 private final Color BROWN = new Color(128, 64, 0);
+	private class RatFigureView implements FigureView {
+		private final Color BROWN = new Color(128, 64, 0);
+
+		@Override
+		public boolean isEmptySpace() {
+			return true;
+		}
 
 		public void draw(Graphics canvas, int width, int height) {
 			if (Rat.this.timer == null) {
