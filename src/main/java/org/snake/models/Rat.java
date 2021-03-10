@@ -10,6 +10,7 @@ import javax.swing.Timer;
 
 import org.snake.game.Board;
 import org.snake.game.GameDataDisplay;
+import org.snake.views.FigureView;
 
 public class Rat implements ActionListener{	
 	private Cell[][] board;

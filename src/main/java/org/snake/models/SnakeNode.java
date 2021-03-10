@@ -1,5 +1,7 @@
 package org.snake.models;
 
+import org.snake.models.basic.Point;
+
 public class SnakeNode  {
     private Point point;
     private boolean isHead;

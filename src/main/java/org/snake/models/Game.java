@@ -1,14 +1,16 @@
 package org.snake.models;
 
 import org.snake.game.Board;
-import org.snake.game.GameWindow;
+import org.snake.models.basic.Point;
+import org.snake.models.basic.PointSpace;
+import org.snake.models.basic.Range;
+import org.snake.models.basic.Vector;
 import org.snake.settings.GameConfiguration;
 import org.snake.settings.SnakeSpeed;
 import org.snake.views.SnakeNodeView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -16,38 +18,40 @@ import java.util.Random;
 
 import static com.google.common.collect.Lists.newLinkedList;
 
-public class Snake implements ActionListener{
-	private final GameWindow frame;
+public class Game {
+	private final OnChangeListener onChangeListener;
+
 	private final Cell[][] board;
 	private final Rat rat;
-	
+	private final PointSpace pointSpace;
+
 	private Deque<SnakeNodeView> snake;
 	private Timer timer;
-	
-	private int direction;
+
+	private Vector direction;
 	private final int snakeSpeed;
 	private int points;
-	
-	private static final int STATIC = 0;		
+
 	private static final int UP = KeyEvent.VK_UP;
 	private static final int DOWN = KeyEvent.VK_DOWN;
 	private static final int LEFT = KeyEvent.VK_LEFT;
 	private static final int RIGHT = KeyEvent.VK_RIGHT;
 	private static final int ADDITION_POINTS = 5;
 	
-	public Snake(GameWindow frame,Board board, Rat rat, GameConfiguration config){
-		this.frame = frame;	
+	public Game(OnChangeListener onChangeListener, Board board, Rat rat, GameConfiguration config) {
+		this.onChangeListener = onChangeListener;
 		this.rat = rat;
 		this.board = board.getBoard();
-		
-		direction = STATIC;
+		this.pointSpace = new PointSpace(new Range(this.board.length), new Range(this.board[0].length));
+
+		direction = new Vector(0, 0);
 		if(config != null){
 			snakeSpeed = config.getSnakeSpeed().snakeSpeed;
 		}else{
 			snakeSpeed = SnakeSpeed.MEDIUM.snakeSpeed;
 		}		
 		
-		timer = new Timer(snakeSpeed, this);
+		timer = new Timer(snakeSpeed, this::actionPerformed);
 		Random rn = new Random();		
 		snake = new LinkedList<>();
 				
@@ -59,17 +63,16 @@ public class Snake implements ActionListener{
 		this.board[x][y].setFigure(snakeNode);
 	}
 	
-	public void restart(){
-
+	public void restart() {
 		for (SnakeNodeView p : snake) {
 			final Point point = p.getModel().getPoint();
 			board[point.x][point.y].removeFigure();
 		}
 		
-		timer = new Timer(snakeSpeed, this);
-		direction = STATIC;
+		timer = new Timer(snakeSpeed, this::actionPerformed);
+		direction = new Vector();
 		points = 0;
-		frame.display.points.setText("" + (points));
+		onChangeListener.onPointsChange(points);
 		snake = newLinkedList();
 		
 		Random rn = new Random();						
@@ -99,92 +102,76 @@ public class Snake implements ActionListener{
 		first.getModel().asTail();
 		final Point point = first.getModel().getPoint();
 		board[point.x][point.y].repaint();
-		
-		if(rat.getPosition() == board[point.x][point.y]){
-			if(rat.isTimed()){				
+
+		if (rat.getPosition() == board[point.x][point.y]) {
+			if (rat.isTimed()) {
 				points = points + ADDITION_POINTS + (SnakeSpeed.EASY.snakeSpeed - snakeSpeed) * rat.getNumberOfRats();
-			}else{
+			} else {
 				grow();
 				board[point.x][point.y].repaint();
 				points = points + ADDITION_POINTS + SnakeSpeed.EASY.snakeSpeed - snakeSpeed;
 			}
-			
-			frame.display.points.setText(String.valueOf(points));
+			onChangeListener.onPointsChange(points);
 			rat.eatRat();
 		}
 
-		int x = point.x;
-		int y = point.y;
-		
-		switch(direction){
-		case UP:
-			y = --y < 0 ? board[0].length - 1 : y;
-			break;
-		case DOWN:
-			y = ++y >= board[0].length ? 0 : y;
-			break;
-		case LEFT:
-			x = --x < 0 ? board.length - 1 : x;
-			break;
-		case RIGHT:
-			x = ++x >= board.length ? 0 : x;
-			break;				
-		}
+		final Point newPoint = pointSpace.around(direction.add(point));
 
-		if(!board[x][y].isEmptySpace()){
-			timer.stop(); frame.gameover(); return;
+		if(!board[newPoint.x][newPoint.y].isEmptySpace()){
+			timer.stop();
+			onChangeListener.onGameOver();
+			return;
 		}
 		
-		last.getModel().setPoint(new Point(x, y));
+		last.getModel().setPoint(newPoint);
 		
-		board[x][y].setFigure(last);
+		board[newPoint.x][newPoint.y].setFigure(last);
 		snake.addFirst(last);
 		last.getModel().asHead();
 		snake.removeLast();
 	}
 			
 	public void moveSnake(int keyCode){		
-		if(direction == STATIC){timer.start();}		
+		if(direction.isOrigin()) {
+			timer.start();
+		}
+
+		Vector newDirection = null;
 		
 		switch(keyCode){
-		case UP:			
-			direction = direction == DOWN ? direction:UP;
+		case UP:
+			newDirection = new Vector(0, -1);
 			break;
 		case DOWN:
-			direction = direction == UP ? direction:DOWN;			
+			newDirection = new Vector(0, +1);
 			break;
 		case LEFT:
-			direction = direction == RIGHT ? direction:LEFT;			
+			newDirection = new Vector(-1, 0);
 			break;
 		case RIGHT:
-			direction = direction == LEFT ? direction:RIGHT;
+			newDirection = new Vector(+1, 0);
 			break;				
+		}
+
+		if(newDirection != null) {
+			Vector result = direction.add(newDirection);
+			if (!result.isOrigin()) {
+				direction = newDirection;
+			}
 		}
 	}	
 	
 	public void grow(){
 		SnakeNodeView last = snake.getLast();
-		
-		int x = last.getModel().getPoint().x;
-		int y = last.getModel().getPoint().y;
-		
-		switch(direction){
-		case UP:
-			y = ++y > board[0].length ? 0 : y;						
-			break;
-		case DOWN: 
-			y = --y < 0 ? board[0].length : y;
-			break;
-		case LEFT:
-			x = ++x > board[0].length ? 0 : x;
-			break;
-		case RIGHT:
-			x = --x < 0 ? board[0].length : x;
-			break;				
-		}		
-		
-		SnakeNodeView sv = new SnakeNodeView(new SnakeNode(new Point(x, y), false));
+		final Point newPoint = pointSpace.around(direction.add(last.getModel().getPoint()));
+
+		SnakeNodeView sv = new SnakeNodeView(new SnakeNode(newPoint, false));
 		snake.addFirst(sv);
 	}
 
+
+	public interface OnChangeListener {
+		void onPointsChange(int points);
+		void onGameOver();
+	}
 }

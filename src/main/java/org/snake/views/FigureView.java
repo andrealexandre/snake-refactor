@@ -1,8 +1,8 @@
-package org.snake.models;
+package org.snake.views;
 
 import java.awt.Graphics;
 
 public interface FigureView {
-    boolean isEmptySpace();
+	boolean isEmptySpace();
 	void draw(Graphics canvas, int width, int height);
 }
