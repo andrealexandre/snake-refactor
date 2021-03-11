@@ -8,29 +8,29 @@ import java.util.Random;
 
 import javax.swing.Timer;
 
-import org.snake.game.Board;
 import org.snake.game.GameDataDisplay;
+import org.snake.models.basic.Point;
 import org.snake.views.FigureView;
 
-public class Rat implements ActionListener{	
-	private Cell[][] board;
-	private GameDataDisplay display;
+public class Rat implements ActionListener {
+	private final GameMatrix board;
+	private final GameDataDisplay display;
 	
-	private Cell position;
+	private Point position = null;
 	
 	private Timer timer;
-	private Random rn;
+	private final Random random;
 	private int numberOfRats;
 	private int count;	
 	
 	private static final int SECOND = 1000;
-	public static final int DESAPIRING_SECONDS = 10;
+	public static final int DISAPPEARING_SECONDS = 10;
 	
-	public Rat(Board board, GameDataDisplay display){
+	public Rat(GameMatrix board, GameDataDisplay display){
 		super();
+		this.board = board;
 		this.display = display;
-		this.board = board.getBoard();
-		rn = new Random();
+		random = new Random();
 		
 		setRandomRat();
 	}
@@ -38,30 +38,36 @@ public class Rat implements ActionListener{
 	public void setRandomRat(){		
 		int x ;
 		int y ;
-		
+
 		do{
-		x = rn.nextInt(this.board.length);
-		y = rn.nextInt(this.board[0].length);
-		}while(!(board[x][y].isGrass()));
+		x = random.nextInt(this.board.width());
+		y = random.nextInt(this.board.height());
+		}while(!(board.isEmpty(x, y)));
 		
-		if(rn.nextInt(101) > 95){
+		if(random.nextInt(101) > 95){
 			timer = new Timer(SECOND, this);		
-			count = DESAPIRING_SECONDS;
-			numberOfRats = rn.nextInt(5) + 1;			
+			count = DISAPPEARING_SECONDS;
+			numberOfRats = random.nextInt(5) + 1;
 			display.tempRats.setText("" + count);
 			display.tempRats.setVisible(true);
 			timer.start();
 		}
-		
-		position = board[x][y];
-		position.setFigure(new RatFigureView());
+
+		position = new Point(x, y);
+		board.setView(new RatFigureView(), position);
 	}
-	
-	public int getNumberOfRats(){return numberOfRats;}
-	
-	public boolean isTimed(){return timer != null;}
-	
-	public Cell getPosition(){return position;}
+
+	public int getNumberOfRats() {
+		return numberOfRats;
+	}
+
+	public boolean isTimed() {
+		return timer != null;
+	}
+
+	public Point getPosition() {
+		return position;
+	}
 	
 	public void actionPerformed(ActionEvent a){
 		if(count-- == 0){			
@@ -74,13 +80,13 @@ public class Rat implements ActionListener{
 		display.tempRats.setText("" + count);
 	}
 	
-	public void restart(){		
-		position.removeFigure();
+	public void restart(){
+		board.removeView(position);
 		setRandomRat();
 	}
 	
 	public void removeRat(){
-		position.removeFigure();
+		board.removeView(position);
 		setRandomRat();		
 	}
 	
@@ -93,7 +99,11 @@ public class Rat implements ActionListener{
 		
 		setRandomRat();		
 	}
-	
+
+	public boolean inPosition(Point point) {
+		return position.equals(point);
+	}
+
 	private class RatFigureView implements FigureView {
 		private final Color BROWN = new Color(128, 64, 0);
 
@@ -102,16 +112,18 @@ public class Rat implements ActionListener{
 			return true;
 		}
 
-		public void draw(Graphics canvas, int width, int height) {
+		@Override
+		public void draw(Graphics canvas, int x, int y, int width, int height) {
 			if (Rat.this.timer == null) {
 				canvas.setColor(BROWN);
 			} else {
 				canvas.setColor(Color.yellow);
 			}
 
-			canvas.fillOval(0, 0, width, height);
+			canvas.fillOval(x, y, width, height);
 			canvas.setColor(Color.BLACK);
-			canvas.drawOval(0, 0, width, height);
+			canvas.drawOval(x, y, width, height);
 		}
+
 	}
 }

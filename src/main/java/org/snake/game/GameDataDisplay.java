@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
-public class GameDataDisplay extends JPanel{
+public class GameDataDisplay extends JPanel {
 	public static final long serialVersionUID = 1L;
 	
 	public JLabel points;	

@@ -90,7 +90,7 @@ public class GameDialog extends JDialog implements ActionListener{
 		private final String action;
 		
 		public NameDialog(GameWindow d, String action){
-			super(d, "Novo HighScore");
+			super(d, "New HighScore");
 			setLayout(new BorderLayout());
 			
 			JPanel j = new JPanel();
@@ -105,32 +105,29 @@ public class GameDialog extends JDialog implements ActionListener{
 			j.add(name);
 			j.add(b);
 			
-			add(new JLabel("Introduz o teu Nome", JLabel.CENTER), BorderLayout.NORTH);
+			add(new JLabel("Your name", JLabel.CENTER), BorderLayout.NORTH);
 			add(j, BorderLayout.CENTER);
-			
-			
+
 			pack();
 			setResizable(false);
 			setAlwaysOnTop(true);
 			setLocationRelativeTo(null);
 			setVisible(true);
 			setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+			name.requestFocusInWindow();
 		}
 		
 		public static boolean isNameValid(String s){
-			if(s.isEmpty()){return false;}
-			
+			if(s.isEmpty()) {
+				return false;
+			}
+
 			for (int i = 0; i < s.length(); i++) {      
 			   char c = s.charAt(i);
-			   if (	   (c >= 'a') && (c <= 'z') || 
-					   (c >= 'A') && (c <= 'Z') ||
-					   (c >= '0') && (c <= '9') ||
-					   (c >= '�') && (c <= '�') ||
-					   (c == ' ')
-			   		) continue;
-			   
-			   return false;
-			}  
+
+			   if (!Character.isAlphabetic(c) && !Character.isDigit(c))
+			   	return false;
+			}
 			
 			return true;
 		}
@@ -141,14 +138,13 @@ public class GameDialog extends JDialog implements ActionListener{
 			GameWindow g = (GameWindow) this.getOwner();
 			g.fileManager.addNewScore(name.getText(), g.getCurrentPoint());
 			
-			if(action.equals("Restart")){
-				g.restart();	
-				this.dispose();
-			}else{
+			if(action.equals("Restart")) {
+				g.restart();
+			} else {
 				g.close();
-				this.dispose();
-			}			
-			
+			}
+			this.dispose();
+
 			new TimedHighScore(g);
 		}
 	}

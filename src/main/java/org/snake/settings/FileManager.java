@@ -13,9 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.snake.models.Block;
-import org.snake.models.Cell;
+import org.snake.models.GameMatrix;
 import org.snake.models.basic.Point;
 import org.snake.views.BlockView;
+import org.snake.views.FigureView;
 
 public class FileManager {
 	private String highScorePath;
@@ -117,11 +118,11 @@ public class FileManager {
 		catch(IOException e){System.exit(0);}
 	}
 	
-	public void loadLabyrinth(Cell[][] c){
+	public void loadLabyrinth(GameMatrix c){
 		if(labyrinthPath != null){loadLabyrinth(c, labyrinthPath);}		
 	}
 
-	public static void loadLabyrinth(Cell[][] c, String labyrinthPath) {
+	public static void loadLabyrinth(GameMatrix c, String labyrinthPath) {
 		BufferedReader br;
 
 		try {
@@ -136,7 +137,7 @@ public class FileManager {
 				Point point = new Point(Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
 				BlockView b = new BlockView(new Block(point));
 
-				c[point.x][point.y].setFigure(b);
+				c.setView(b, point.x, point.y);
 			}
 
 			br.close();

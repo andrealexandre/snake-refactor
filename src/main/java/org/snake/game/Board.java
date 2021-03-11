@@ -1,45 +1,43 @@
 package org.snake.game;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import org.snake.models.GameMatrix;
+import org.snake.views.FigureView;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import java.awt.*;
 
-import org.snake.models.Cell;
-
-public class Board extends JPanel{
+public class Board extends JPanel {
 	public static final long serialVersionUID = 1L;
 	public static final Color BOARD_DEFAULT_COLOR = new Color(0, 128, 0);
-	
-	private Cell[][] board;
+	public static final int GRID_THICKNESS = 25;
 
-	public static final int GRID_WIDTH = 30;
-	public static final int GRID_HEIGHT = 35;	
+	private final GameMatrix matrix;
 
-	public Board(){
+	public Board(GameMatrix matrix) {
 		super();
+		this.matrix = matrix;
 		this.setBackground(BOARD_DEFAULT_COLOR);
-		setBorder(new EtchedBorder());				
-		setLayout(new GridLayout(GRID_HEIGHT, GRID_WIDTH));	
-		
-		board = new Cell[GRID_WIDTH][GRID_HEIGHT];
-				
-		for(int y = 0; y < GRID_HEIGHT; y++){
-			for(int x = 0; x < GRID_WIDTH; x++){				
-				Cell c = new Cell();				
-				board[x][y] = c;				
-				this.add(c);	
-			}	
+		setBorder(new EtchedBorder());
+		setLayout(null);
+		setSize(GRID_THICKNESS * matrix.width(), GRID_THICKNESS * matrix.height());
+		setPreferredSize(new Dimension(GRID_THICKNESS * matrix.width(), GRID_THICKNESS * matrix.height()));
+	}
+
+	@Override
+	protected void paintComponent(Graphics canvas) {
+		super.paintComponent(canvas);
+		for (int y = 0; y < matrix.height(); y++) {
+			for (int x = 0; x < matrix.width(); x++) {
+				matrix.get(x, y).draw(canvas, x * GRID_THICKNESS, y * GRID_THICKNESS, GRID_THICKNESS, GRID_THICKNESS);
+			}
 		}
 	}
-	
-	public Cell[][] getBoard(){return board;}
-	
+
 	public void clearLabyrinth(){
-		for(int y = 0; y < GRID_HEIGHT; y++){
-			for(int x = 0; x < GRID_WIDTH; x++){				
-				board[x][y].removeFigure();			
+		for(int y = 0; y < matrix.height(); y++){
+			for(int x = 0; x < matrix.width(); x++){
+				matrix.removeView(x, y);
 			}	
 		}
 	}

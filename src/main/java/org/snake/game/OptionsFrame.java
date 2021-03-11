@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EtchedBorder;
 
+import org.snake.models.GameMatrix;
 import org.snake.settings.FileManager;
 import org.snake.settings.GameConfiguration;
 import org.snake.settings.SnakeSpeed;
@@ -122,10 +123,12 @@ public class OptionsFrame extends JFrame implements ActionListener{
 
 	private class LabyrinthPreviewer extends JPanel implements ActionListener{
 		public static final long serialVersionUID = 1L;
-			Board b;
-			JLabel labyrinthName;
-			String[] labyrinths;
-			int idx;
+
+		final GameMatrix cells = new GameMatrix(30, 35);
+		final Board board = new Board(cells);
+		JLabel labyrinthName;
+		String[] labyrinths;
+		int idx;
 		
 		public LabyrinthPreviewer(){
 			super();
@@ -144,9 +147,8 @@ public class OptionsFrame extends JFrame implements ActionListener{
 			add(next, BorderLayout.EAST);
 			add(labyrinthName, BorderLayout.CENTER);
 			add(previous, BorderLayout.WEST);
-						
-			b = new Board();
-			add(b , BorderLayout.NORTH);
+
+			add(board, BorderLayout.NORTH);
 			
 			File f = new File("labyrinths/");
 			labyrinths = f.list();
@@ -166,7 +168,7 @@ public class OptionsFrame extends JFrame implements ActionListener{
 		
 		public void actionPerformed(ActionEvent a){
 			String action = a.getActionCommand();
-			b.clearLabyrinth();
+			board.clearLabyrinth();
 			
 			if(action.equals("Next")){
 				++idx;
@@ -175,7 +177,7 @@ public class OptionsFrame extends JFrame implements ActionListener{
 					labyrinthName.setText("No Labyrinth");
 				}else{
 					String LabyrinthPath = FileManager.LABYRINTH_PATH + labyrinths[idx] + FileManager.LABYRINTH_EXT;
-					FileManager.loadLabyrinth(b.getBoard(), LabyrinthPath);
+					FileManager.loadLabyrinth(cells, LabyrinthPath);
 					labyrinthName.setText(labyrinths[idx]);
 				}
 			}else{				
@@ -187,11 +189,13 @@ public class OptionsFrame extends JFrame implements ActionListener{
 					}
 					else{
 						String LabyrinthPath = FileManager.LABYRINTH_PATH + labyrinths[idx] + FileManager.LABYRINTH_EXT;
-						FileManager.loadLabyrinth(b.getBoard(), LabyrinthPath);
+						FileManager.loadLabyrinth(cells, LabyrinthPath);
 						labyrinthName.setText(labyrinths[idx]);
 					}					
 				}
 			}
+
+			board.repaint();
 		}
 	}
 }

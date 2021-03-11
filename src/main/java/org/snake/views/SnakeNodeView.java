@@ -23,16 +23,17 @@ public class SnakeNodeView implements FigureView {
     }
 
     @Override
-    public void draw(Graphics canvas, int width, int height){
+    public void draw(Graphics canvas, int x, int y, int width, int height) {
         canvas.setColor(SNAKE_NODE_COLOR);
-        canvas.fillOval(0, 0, width, height);
+        canvas.fillOval(x, y, width, height);
         canvas.setColor(Color.BLACK);
-        canvas.drawOval(0, 0, width, height);
+        canvas.drawOval(x, y, width, height);
 
         if(model.isHead()){
             canvas.setColor(Color.BLUE);
-            canvas.fillOval((width)/4, height/4, width/2, height/2);
-            canvas.fillOval((width * 3)/4, height/4, width/2, height/2);
+            canvas.fillOval(x + (width)/4, y + height/4, width/2, height/2);
+            canvas.fillOval(x +(width * 3)/4, y + height/4, width/2, height/2);
         }
     }
+
 }

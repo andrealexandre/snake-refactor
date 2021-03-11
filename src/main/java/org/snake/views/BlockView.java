@@ -20,9 +20,9 @@ public class BlockView implements FigureView {
 	}
 
 	@Override
-	public void draw(Graphics canvas, int x, int y){
+	public void draw(Graphics canvas, int x, int y, int width, int height) {
 		canvas.setColor(Color.lightGray);
-		canvas.fill3DRect(0, 0, x, y, true);	
+		canvas.fill3DRect(x, y, width, height, true);
 	}
 
 }
