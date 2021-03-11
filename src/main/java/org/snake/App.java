@@ -18,7 +18,6 @@ public class App {
         final GameConfiguration gameConfiguration = new GameConfiguration();
 
         new GameMenu(menuTitle, gameConfiguration).start(gameWindowTitle);
-
-        System.out.println(new App().getGreeting());
     }
+
 }

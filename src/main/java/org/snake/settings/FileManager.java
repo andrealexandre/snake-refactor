@@ -12,7 +12,9 @@ import java.io.PrintWriter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.snake.models.Block;
 import org.snake.models.Cell;
+import org.snake.models.basic.Point;
 import org.snake.views.BlockView;
 
 public class FileManager {
@@ -21,9 +23,9 @@ public class FileManager {
 	
 	private Player[] scores;
 	
-	public static final String HIGHSCORE_PATH = "src/main/java/org/snake/files/high scores/";
+	public static final String HIGHSCORE_PATH = "high-scores/";
 	public static final String HIGHSCORE_EXT = ".high";
-	public static final String LABYRINTH_PATH = "src/main/java/org/snake/files/labyrinths/";
+	public static final String LABYRINTH_PATH = "labyrinths/";
 	public static final String LABYRINTH_EXT = ".labyrinth";
 	public static final String NOLABYRINTH = "noLabyrinth";
 	
@@ -128,15 +130,13 @@ public class FileManager {
 			String s;
 			String[] xy;
 
-			BlockView b = new BlockView();
-
 			while ((s = br.readLine()) != null) {
 				xy = s.split(",");
 
-				int x = Integer.parseInt(xy[0]);
-				int y = Integer.parseInt(xy[1]);
+				Point point = new Point(Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
+				BlockView b = new BlockView(new Block(point));
 
-				c[x][y].setFigure(b);
+				c[point.x][point.y].setFigure(b);
 			}
 
 			br.close();

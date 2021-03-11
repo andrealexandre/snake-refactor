@@ -75,20 +75,19 @@ public class GameDialog extends JDialog implements ActionListener{
 			if(s.equals("Restart")){
 				g.restart();
 				g.setVisible(true);
-				this.dispose();
-			}else{
-				g.close();				
-				this.dispose();
-			}	
+			} else {
+				g.close();
+			}
+			this.dispose();
 		}
 		
 		
 	}
 	
-	private class NameDialog extends JDialog implements ActionListener{
+	private static class NameDialog extends JDialog implements ActionListener{
 		public static final long serialVersionUID = 1L;
-		private JTextField name;
-		private String action;
+		private final JTextField name;
+		private final String action;
 		
 		public NameDialog(GameWindow d, String action){
 			super(d, "Novo HighScore");
@@ -118,9 +117,7 @@ public class GameDialog extends JDialog implements ActionListener{
 			setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		}
 		
-		public boolean isValide(){
-			String s = name.getText();
-			
+		public static boolean isNameValid(String s){
 			if(s.isEmpty()){return false;}
 			
 			for (int i = 0; i < s.length(); i++) {      
@@ -138,8 +135,8 @@ public class GameDialog extends JDialog implements ActionListener{
 			return true;
 		}
 		
-		public void actionPerformed(ActionEvent a){			
-			if(!isValide()){return;}
+		public void actionPerformed(ActionEvent a) {
+			if(!isNameValid(name.getText())){return;}
 			
 			GameWindow g = (GameWindow) this.getOwner();
 			g.fileManager.addNewScore(name.getText(), g.getCurrentPoint());
@@ -156,14 +153,17 @@ public class GameDialog extends JDialog implements ActionListener{
 		}
 	}
 
-	private class TimedHighScore extends JFrame implements ActionListener{
+	private static class TimedHighScore extends JFrame {
 		public static final long serialVersionUID = 1L;
 		
 		Timer timer;
 		
 		public TimedHighScore(GameWindow g){
 			super("HighScore");
-			timer = new Timer(5000, this);
+			timer = new Timer(5000, event -> {
+				timer.stop();
+				dispose();
+			});
 			
 			add(g.fileManager.getDisplayHighScore());
 			setSize(256, 128);
@@ -173,11 +173,6 @@ public class GameDialog extends JDialog implements ActionListener{
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			
 			timer.start();
-		}
-		
-		public void actionPerformed(ActionEvent a){
-			timer.stop();
-			this.dispose();
 		}
 	}
 }

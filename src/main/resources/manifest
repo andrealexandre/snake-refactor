@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Created-By: André Alexandre
-Main-Class: game.GameMenu
+Main-Class: org.snake.App
 

@@ -4,9 +4,15 @@ import org.snake.models.Block;
 
 import java.awt.*;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class BlockView implements FigureView {
 
 	private Block model;
+
+	public BlockView(Block model) {
+		this.model = checkNotNull(model);
+	}
 
 	@Override
 	public boolean isEmptySpace() {
