@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Created-By: André Alexandre
-Main-Class: org.snake.App
+Main-Class: snake.App
 
